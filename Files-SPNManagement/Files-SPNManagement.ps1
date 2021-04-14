@@ -46,6 +46,20 @@ HelpMessage = "Enter Files HostName you want to remove SPNs from, for example Fi
 [string]$DomainName
 )
 
+#region Module check
+
+if(!(Get-Module -Name ActiveDirectory)){
+    try{
+        Import-Module -Name ActiveDirectory
+    }
+    catch{
+        Write-Host "Cannot find/import Active Directory Module, Install Remote server administration tools."
+    }
+}
+
+#endregion
+
+#region AddSPN
 
 If($Add){
     Write-Host -BackgroundColor White -ForegroundColor Red "Performing Add operation"
@@ -67,6 +81,9 @@ If($Add){
     }
 }
 
+#endregion
+
+#region RemoveSPN
 
 if($Remove){
     Write-Host -BackgroundColor White -ForegroundColor Red "Performing Remove operation"
@@ -91,6 +108,8 @@ if($Remove){
         }
     }
 }
+
+#endregion
 
 if($List){
     (Get-ADComputer -Identity $HostName -Properties ServicePrincipalNames | Select-Object ServicePrincipalNames).ServicePrincipalNames
