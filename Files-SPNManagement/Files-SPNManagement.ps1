@@ -129,5 +129,13 @@ if($Remove){
 #endregion
 
 if($List){
+    try{
+        Get-ADComputer -Identity $HostName
+    }
+    catch{
+        Write-Host -ForegroundColor Red "$HostName Hostname does not exist in Active Directory"
+        exit
+    }
+
     (Get-ADComputer -Identity $HostName -Properties ServicePrincipalNames | Select-Object ServicePrincipalNames).ServicePrincipalNames
 }
