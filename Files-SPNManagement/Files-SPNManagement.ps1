@@ -14,6 +14,9 @@ Necessary permission are required, the user account must be member of Domain Adm
 Adds SPNs Host/Files-C.lab.com, Host/Files-C, Host/Files-C-1.lab.com, Host/Files-C-1 and so on, to computer account Files-B
 .EXAMPLE
 .\Files-SPNManagement.ps1 -Remove -RemoveHostName Files-C -RemoveFrom Files-B -DomainName Lab.com
+.EXAMPLE
+.\Files-SPNManagement.ps1 -list -Hostname Files-B -DomainName Lab.com
+List all SPN records for specified Hostname
 #>
 
 [cmdletbinding()]
