@@ -65,6 +65,14 @@ if(!(Get-Module -ListAvailable | Where-Object { $_.Name -Like "ActiveDirectory" 
 If($Add){
     Write-Host -BackgroundColor White -ForegroundColor Red "Performing Add operation"
 
+    try{
+        Get-ADComputer -Identity $AddTo
+    }
+    catch{
+        Write-Host -ForegroundColor Red "$Addto Hostname does not exist in Active Directory"
+        exit
+    }
+
     $ctr = 1
     while($ctr -le 32){
         Write-verbose "Adding Host/NTNX-$AddHostName-$ctr.$DomainName and Host/NTNX-$AddHostName-$ctr"
@@ -88,6 +96,14 @@ If($Add){
 
 if($Remove){
     Write-Host -BackgroundColor White -ForegroundColor Red "Performing Remove operation"
+
+    try{
+        Get-ADComputer -Identity $RemoveFrom
+    }
+    catch{
+        Write-Host -ForegroundColor Red "$RemoveFrom Hostname does not exist in Active Directory"
+        exit
+    }
 
     $R1 = "Host/NTNX-$RemoveHostName"
     $R2 = "Host/$RemoveHostName"
