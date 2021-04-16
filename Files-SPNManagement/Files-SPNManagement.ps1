@@ -48,12 +48,13 @@ HelpMessage = "Enter Files HostName you want to remove SPNs from, for example Fi
 
 #region Module check
 
-if(!(Get-Module -Name ActiveDirectory)){
+if(!(Get-Module -ListAvailable | Where-Object { $_.Name -Like "ActiveDirectory" })){
     try{
-        Import-Module -Name ActiveDirectory
+        Import-Module -Name ActiveDirectory -ErrorAction Stop
     }
     catch{
-        Write-Host "Cannot find/import Active Directory Module, Install Remote server administration tools."
+        Write-Host -ForegroundColor Red "Cannot find/import Active Directory Module, Install Remote server administration tools."
+        exit
     }
 }
 
