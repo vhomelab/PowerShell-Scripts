@@ -14,8 +14,11 @@ Necessary permission are required, the user account must be member of Domain Adm
 Adds SPNs Host/Files-C.lab.com, Host/Files-C, Host/Files-C-1.lab.com, Host/Files-C-1 and so on, to computer account Files-B
 .EXAMPLE
 .\Files-SPNManagement.ps1 -Remove -RemoveHostName Files-C -RemoveFrom Files-B -DomainName Lab.com
+
+Remove SPNs Host/Files-C.lab.com, Host/Files-C, Host/Files-C-1.lab.com, Host/Files-C-1 and so on, from computer account Files-B
 .EXAMPLE
 .\Files-SPNManagement.ps1 -list -Hostname Files-B -DomainName Lab.com
+
 List all SPN records for specified Hostname
 #>
 
@@ -69,7 +72,7 @@ If($Add){
     Write-Host -BackgroundColor White -ForegroundColor Red "Performing Add operation"
 
     try{
-        Get-ADComputer -Identity $AddTo
+        Get-ADComputer -Identity $AddTo | Out-Null
     }
     catch{
         Write-Host -ForegroundColor Red "$Addto Hostname does not exist in Active Directory"
@@ -85,10 +88,10 @@ If($Add){
         Start-Sleep 2
         $ctr++
         if($ctr -gt 32){
-            Write-verbose "Adding Host/NTNX-$AddHostName.$DomainName and Host/NTNX-$AddHostName"
-            Set-ADComputer -Identity $AddTo -ServicePrincipalNames @{Add="Host/NTNX-$AddHostName.$DomainName","Host/NTNX-$AddHostName"}
-            Write-Host -ForegroundColor Green "Host/NTNX-$AddHostName.$DomainName"
-            Write-Host -ForegroundColor Green "Host/NTNX-$AddHostName"
+            Write-verbose "Adding Host/$AddHostName.$DomainName and Host/$AddHostName"
+            Set-ADComputer -Identity $AddTo -ServicePrincipalNames @{Add="Host/$AddHostName.$DomainName","Host/$AddHostName"}
+            Write-Host -ForegroundColor Green "Host/$AddHostName.$DomainName"
+            Write-Host -ForegroundColor Green "Host/$AddHostName"
         }
     }
 }
@@ -101,7 +104,7 @@ if($Remove){
     Write-Host -BackgroundColor White -ForegroundColor Red "Performing Remove operation"
 
     try{
-        Get-ADComputer -Identity $RemoveFrom
+        Get-ADComputer -Identity $RemoveFrom | Out-Null
     }
     catch{
         Write-Host -ForegroundColor Red "$RemoveFrom Hostname does not exist in Active Directory"
@@ -133,7 +136,7 @@ if($Remove){
 
 if($List){
     try{
-        Get-ADComputer -Identity $HostName
+        Get-ADComputer -Identity $HostName | Out-Null
     }
     catch{
         Write-Host -ForegroundColor Red "$HostName Hostname does not exist in Active Directory"
